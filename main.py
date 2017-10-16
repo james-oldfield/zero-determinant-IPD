@@ -1,7 +1,7 @@
 import numpy as np
 from argparse import ArgumentParser
 
-parser = ArgumentParser(description='Process some integers.')
+parser = ArgumentParser(description='')
 parser.add_argument('--debug', required=False)
 args = parser.parse_args()
 
@@ -20,7 +20,7 @@ def compute_equilibrium_payoffs(S_x=default_payoffs.get('X'),
     Computes the stationary probability distribution for Markov chain
     corresponding to the PD game, and returns the long-term expected value.
 
-    Note: S_x, S_y are expected to be column vectors of shape (1, m)
+    Note: S_x, S_y are expected to be row vectors of shape (1, m)
 
     :param S_x: short-term payoffs for X, else uses literature defaults.
     :param S_y: short-term payoffs for Y, else uses literature defaults.
@@ -31,7 +31,7 @@ def compute_equilibrium_payoffs(S_x=default_payoffs.get('X'),
     M = np.array([[.30, .70],
                   [.75, .25]])
 
-    # compute the right eigenvector of M with a corresponding eigenvalue
+    # compute the left eigenvector of M with a corresponding eigenvalue
     # of 1 (λ=1). i.e. np.dot(v, M) = λv
     e_vals, e_vecs = np.linalg.eig(M.T)
 
@@ -45,7 +45,7 @@ def compute_equilibrium_payoffs(S_x=default_payoffs.get('X'),
     # defaults to a rank-1 vector which is no good
     stationary_vec = stationary_vec.reshape(stationary_vec.shape[0], -1)
 
-    # Check that the eigenvector has been computing correctly
+    # Check that the eigenvector has been computed correctly
     if debug:
         sstate = np.dot(stationary_vec.T, M)
 
