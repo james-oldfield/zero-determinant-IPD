@@ -45,6 +45,9 @@ def compute_equilibrium_payoffs(S_x=default_payoffs.get('X'),
     # defaults to a rank-1 vector which is no good
     stationary_vec = stationary_vec.reshape(stationary_vec.shape[0], -1)
 
+    # normalise to constitute valid prob. dist
+    stationary_vec = stationary_vec / sum(stationary_vec)
+
     # Check that the eigenvector has been computed correctly
     if debug:
         sstate = np.dot(stationary_vec.T, M)
