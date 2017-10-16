@@ -1,6 +1,11 @@
 import numpy as np
+from argparse import ArgumentParser
 
-debug = True
+parser = ArgumentParser(description='Process some integers.')
+parser.add_argument('--debug', required=False)
+args = parser.parse_args()
+
+debug = args.debug
 
 # Define the standard short-term payoff vectors for a PD
 default_payoffs = {
@@ -39,6 +44,19 @@ def compute_equilibrium_payoffs(S_x=default_payoffs.get('X'),
     # reshape stationary_vec for dotting with payoffs
     # defaults to a rank-1 vector which is no good
     stationary_vec = stationary_vec.reshape(stationary_vec.shape[0], -1)
+
+    # Check that the eigenvector has been computing correctly
+    if debug:
+        sstate = np.dot(stationary_vec.T, M)
+
+        # perform element-wise comparison
+        for i, element in enumerate(sstate[0]):
+            x = round(element, 3)
+            y = round(stationary_vec[i][0], 3)
+
+            print('Checking assertion of x, y...')
+            assert(x == y)
+            print('... x == y!')
 
     exp_value = (stationary_vec.dot(S_x),
                  stationary_vec.dot(S_y))
