@@ -4,7 +4,7 @@ A python program to simulate games involving player X playing an exploitive zero
 
 ## todo
 
-- [ ] Allow analytic computation of expected long-term payoffs
+- [x] Allow analytic computation of expected long-term payoffs
 - [ ] Create interface to simulate iterated games with given strategies
 - [ ] Allow second player—Y—to play non-evolutionary strategy => ultimatum game
 
