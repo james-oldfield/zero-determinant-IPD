@@ -1,5 +1,7 @@
 import numpy as np
+
 from argparse import ArgumentParser
+from default_settings import defaults
 
 parser = ArgumentParser(description='')
 parser.add_argument('--debug', required=False)
@@ -7,15 +9,30 @@ args = parser.parse_args()
 
 debug = args.debug
 
-# Define the standard short-term payoff vectors for a PD
-default_payoffs = {
-    'X': np.array([[5, 3, 1, 0]]),
-    'Y': np.array([[5, 1, 3, 0]]),
-}
+
+def compose_markov_mat(p, q):
+    """
+    Creates a markov matrix specified by probability vectors
+    of cooperating, p, q.
+
+    :param p: prob. of cooperating, given (cc, cd, dc, dd) in last time step
+    :param q: prob. of cooperating, given (cc, cd, dc, dd) in last time step
+
+    :return: matrix - numpy matrix representing transitions
+    """
+    p1, p2, p3, p4 = p
+    q1, q2, q3, q4 = q
+
+    return np.array([[p1*q1, p1*(1.0-q1), (1.0-p1)*q1, (1-p1)*(1-q1)],
+                     [p2*q3, p2*(1.0-q3), (1.0-p2)*q3, (1-p2)*(1-q3)],
+                     [p3*q2, p3*(1.0-q2), (1.0-p3)*q2, (1-p3)*(1-q2)],
+                     [p4*q4, p4*(1.0-q4), (1.0-p4)*q4, (1-p4)*(1-q4)]])
 
 
-def compute_equilibrium_payoffs(S_x=default_payoffs.get('X'),
-                                S_y=default_payoffs.get('Y')):
+def compute_equilibrium_payoffs(S_x=defaults.get('X'),
+                                S_y=defaults.get('Y'),
+                                p=defaults.get('p'),
+                                q=defaults.get('q')):
     """
     Computes the stationary probability distribution for Markov chain
     corresponding to the PD game, and returns the long-term expected value.
@@ -27,9 +44,8 @@ def compute_equilibrium_payoffs(S_x=default_payoffs.get('X'),
 
     :return: tuple - The long-term payoffs for X, Y, respectively.
     """
-    # M represents the transition matrix for the Markov chain
-    M = np.array([[.30, .70],
-                  [.75, .25]])
+
+    M = compose_markov_mat(p, q)
 
     # compute the left eigenvector of M with a corresponding eigenvalue
     # of 1 (λ=1). i.e. np.dot(v, M) = λv
