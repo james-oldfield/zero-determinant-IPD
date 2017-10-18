@@ -1,6 +1,7 @@
 import numpy as np
 
 from argparse import ArgumentParser
+from ast import literal_eval
 from default_settings import defaults, strategies
 
 parser = ArgumentParser(description='')
@@ -19,12 +20,12 @@ parser.add_argument('--P_X',
                     required=False,
                     help='Specif the probability in vector form,\
                     for X cooperating, given last round\'s outcomes were\
-                    (CC, CD, DC, DD), e.g. P_X=\'1010\'')
+                    (CC, CD, DC, DD), e.g. P_X=\'(1,0,1,0)\'')
 parser.add_argument('--P_Y',
                     required=False,
                     help='Specify a probability in vector form,\
                     for Y cooperating, given last round\'s outcomes were\
-                    (CC, DC, CD, DD), e.g. P_X=\'1100\'')
+                    (CC, DC, CD, DD), e.g. P_Y=\'(1,1,0,0)\'')
 args = parser.parse_args()
 
 debug = args.debug
@@ -70,11 +71,9 @@ def compute_equilibrium_payoffs(S_x=defaults.get('X'),
 
     # update the probabilites if specified manually
     if args.P_X:
-        p = list(args.P_X)
-        p = tuple([int(x) for x in p])
+        p = literal_eval(args.P_X)
     if args.P_Y:
-        q = list(args.P_Y)
-        q = tuple([int(y) for y in q])
+        q = literal_eval(args.P_Y)
 
     M = compose_markov_mat(p, q)
 
