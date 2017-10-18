@@ -74,7 +74,7 @@ def compute_equilibrium_payoffs(S_x=defaults.get('X'),
         p = tuple([int(x) for x in p])
     if args.P_Y:
         q = list(args.P_Y)
-        q = tuple([int(y) for y in p])
+        q = tuple([int(y) for y in q])
 
     M = compose_markov_mat(p, q)
 
