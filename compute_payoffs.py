@@ -1,10 +1,30 @@
 import numpy as np
 
 from argparse import ArgumentParser
-from default_settings import defaults
+from default_settings import defaults, strategies
 
 parser = ArgumentParser(description='')
-parser.add_argument('--debug', required=False)
+parser.add_argument('--debug',
+                    required=False,
+                    help='Print debug information')
+parser.add_argument('--X',
+                    required=False,
+                    help='Specify a named strategy for player X.\
+                    See `default_settings.py for more info`')
+parser.add_argument('--Y',
+                    required=False,
+                    help='Specify a named strategy for player Y.\
+                    See `default_settings.py for more info`')
+parser.add_argument('--P_X',
+                    required=False,
+                    help='Specif the probability in vector form,\
+                    for X cooperating, given last round\'s outcomes were\
+                    (CC, CD, DC, DD), e.g. P_X=\'1010\'')
+parser.add_argument('--P_Y',
+                    required=False,
+                    help='Specify a probability in vector form,\
+                    for Y cooperating, given last round\'s outcomes were\
+                    (CC, DC, CD, DD), e.g. P_X=\'1100\'')
 args = parser.parse_args()
 
 debug = args.debug
@@ -30,9 +50,7 @@ def compose_markov_mat(p, q):
 
 
 def compute_equilibrium_payoffs(S_x=defaults.get('X'),
-                                S_y=defaults.get('Y'),
-                                p=defaults.get('p'),
-                                q=defaults.get('q')):
+                                S_y=defaults.get('Y')):
     """
     Computes the stationary probability distribution for Markov chain
     corresponding to the PD game, and returns the long-term expected value.
@@ -44,6 +62,19 @@ def compute_equilibrium_payoffs(S_x=defaults.get('X'),
 
     :return: tuple - The long-term payoffs for X, Y, respectively.
     """
+
+    p = (strategies.get(args.X)
+         or strategies.get('tft')).get('X')
+    q = (strategies.get(args.Y)
+         or strategies.get('tft')).get('Y')
+
+    # update the probabilites if specified manually
+    if args.P_X:
+        p = list(args.P_X)
+        p = tuple([int(x) for x in p])
+    if args.P_Y:
+        q = list(args.P_Y)
+        q = tuple([int(y) for y in p])
 
     M = compose_markov_mat(p, q)
 
