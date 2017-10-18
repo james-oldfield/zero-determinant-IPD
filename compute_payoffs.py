@@ -77,10 +77,10 @@ def compute_equilibrium_payoffs(S_x=defaults.get('X'),
             assert(x == y)
             print('... x == y!')
 
-    exp_value = (stationary_vec.T.dot(S_x.T),
-                 stationary_vec.T.dot(S_y.T))
+    exp_value = np.squeeze((stationary_vec.T.dot(S_x.T),
+                            stationary_vec.T.dot(S_y.T)))
 
     return exp_value
 
 
-compute_equilibrium_payoffs()
+print(compute_equilibrium_payoffs())
