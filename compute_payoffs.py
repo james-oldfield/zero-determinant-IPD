@@ -18,7 +18,7 @@ parser.add_argument('--Y',
                     See `default_settings.py for more info`')
 parser.add_argument('--P_X',
                     required=False,
-                    help='Specif the probability in vector form,\
+                    help='Specify the probability in vector form,\
                     for X cooperating, given last round\'s outcomes were\
                     (CC, CD, DC, DD), e.g. P_X=\'(1,0,1,0)\'')
 parser.add_argument('--P_Y',
