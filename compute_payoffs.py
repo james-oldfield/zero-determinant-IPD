@@ -50,7 +50,8 @@ def compose_markov_mat(p, q):
                      [p4*q4, p4*(1.0-q4), (1.0-p4)*q4, (1-p4)*(1-q4)]])
 
 
-def compute_equilibrium_payoffs(S_x=defaults.get('X'),
+def compute_equilibrium_payoffs(p=None, q=None,
+                                S_x=defaults.get('X'),
                                 S_y=defaults.get('Y')):
     """
     Computes the stationary probability distribution for Markov chain
@@ -64,16 +65,18 @@ def compute_equilibrium_payoffs(S_x=defaults.get('X'),
     :return: tuple - The long-term payoffs for X, Y, respectively.
     """
 
-    p = (strategies.get(args.X)
-         or strategies.get('tft')).get('X')
-    q = (strategies.get(args.Y)
-         or strategies.get('tft')).get('Y')
+    # only populate p, q if accessed via CLI
+    if p is None or q is None:
+        p = (strategies.get(args.X)
+             or strategies.get('tft')).get('X')
+        q = (strategies.get(args.Y)
+             or strategies.get('tft')).get('Y')
 
-    # update the probabilites if specified manually
-    if args.P_X:
-        p = literal_eval(args.P_X)
-    if args.P_Y:
-        q = literal_eval(args.P_Y)
+        # update the probabilites if specified manually
+        if args.P_X:
+            p = literal_eval(args.P_X)
+        if args.P_Y:
+            q = literal_eval(args.P_Y)
 
     M = compose_markov_mat(p, q)
 
