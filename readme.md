@@ -19,7 +19,7 @@ python compute_payoffs.py --X='tft' --Y='tft'
 # [3. 3.], (Given default values for outcomes)
 
 # 3-factor extortion VS vanilla tit-for-tat
-python compute_payoffs.py --X='extortion-3' --Y='tft'
+python compute_payoffs.py --X='ex-3' --Y='tft'
 # [ 3.72727273  1.90909091]
 ```
 
